@@ -1,23 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
+import strandsLogo from './images/strandsLogo.png';
 
 function App() {
+  const handlePlayClick = () => {
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <header className="StartScene">
+        <img src={strandsLogo} alt="Strands logo" />
+        <h1 className="Title">Strands</h1>
+        <h2>BETA</h2>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Find hidden words and uncover the day's theme
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+
+        <button onClick={handlePlayClick}>Play</button>
+
+        <p>Date</p>
+        <p>Puzzle by </p>
       </header>
+      
     </div>
   );
 }
