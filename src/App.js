@@ -1,29 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
 import strandsLogo from './images/strandsLogo.png';
+import Board from './Board';
+import Home from './Home';
 
 function App() {
-  const handlePlayClick = () => {
-  };
-
   return (
-    <div className="App">
-      <header className="StartScene">
-        <img src={strandsLogo} alt="Strands logo" />
-        <h1 className="Title">Strands</h1>
-        <h2>BETA</h2>
-        <p>
-          Find hidden words and uncover the day's theme
-        </p>
-
-        <button onClick={handlePlayClick}>Play</button>
-
-        <p>Date</p>
-        <p>Puzzle by </p>
-      </header>
-      
+    <div>
+      <Home/>
     </div>
-  );
+  )
 }
 
 export default App;
