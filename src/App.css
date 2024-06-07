@@ -65,3 +65,16 @@
   font-size: 40px;
   font-family: 'Arial';
 }
+
+.Banner {
+  font-size: 20px;
+  display: inline-block; /* Ensures the background color only spans the text */
+  border: 1px solid black; /* Specify the border width */
+  background-color: #AEDFEE;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+h2 {
+  text-align: center;
+}

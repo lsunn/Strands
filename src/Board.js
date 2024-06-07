@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 const cell = {
-    letter: 'A',
+    letter: 'A', //letter to be determined
     isSelected: false,
     isFound: false,
 };
@@ -12,14 +12,14 @@ const numCols = 6;  // number of columns
 
 const createInitialGrid = () => {
     const grid = []; // Initialize an empty array for the grid
-    for (let row = 0; row < numRows; row++) { // Loop through each row
+    for (let row = 0; row < numRows; row++) { 
         const currentRow = []; // Initialize an empty array for the current row
-        for (let col = 0; col < numCols; col++) { // Loop through each column
-            currentRow.push({ ...cell }); // Add a copy of the cell object to the current row
+        for (let col = 0; col < numCols; col++) {
+            currentRow.push({ ...cell });
         }
-        grid.push(currentRow); // Add the current row to the grid
+        grid.push(currentRow); //Add the current row to the grid
     }
-    return grid; // Return the completed grid
+    return grid;
 };
 
 const Cell = ({ cell }) => {
