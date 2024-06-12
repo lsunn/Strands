@@ -1,7 +1,7 @@
 {
   "name": "strands",
   "version": "0.1.0",
-  "homepage": "https://lsunn.github.io/Strands",
+  "homepage": "https://lsunn.github.io/strands",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
