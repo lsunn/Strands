@@ -1,8 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
-import strandsLogo from './images/strandsLogo.png';
+import strandsLogo from './images/strandsLogo.svg';
 import Board from './Board';
-import Home from './Home';
 import Banner from './Banner';
 import { useState } from 'react';
 

@@ -2,22 +2,26 @@ import React, { useState } from 'react';
 import './App.css';
 
 const cell = {
-    letter: 'A', //letter to be determined
+    //letter to be determined
+    letter: 'A',
     isSelected: false,
     isFound: false,
 };
 
-const numRows = 8;  // number of rows
-const numCols = 6;  // number of columns
+const numRows = 8;
+const numCols = 6;
 
 const createInitialGrid = () => {
-    const grid = []; // Initialize an empty array for the grid
+    // Initialize an empty array for the grid
+    const grid = [];
     for (let row = 0; row < numRows; row++) { 
-        const currentRow = []; // Initialize an empty array for the current row
+        // Initialize an empty array for the current row
+        const currentRow = [];
         for (let col = 0; col < numCols; col++) {
             currentRow.push({ ...cell });
         }
-        grid.push(currentRow); //Add the current row to the grid
+        //Add the current row to the grid
+        grid.push(currentRow);
     }
     return grid;
 };
