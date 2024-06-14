@@ -30,6 +30,10 @@ const Cell = ({ cell }) => {
     );
 };
 
+function chooseLetter() {
+    
+};
+
 function Board() {
     const [grid, setGrid] = useState(createInitialGrid());
 
@@ -38,7 +42,7 @@ function Board() {
             {grid.map((row, rowIndex) => (
                 <div key={rowIndex} className="row">
                     {row.map((cell, colIndex) => (
-                        <Cell key={colIndex} cell={cell} />
+                        <Cell key={colIndex} cell={cell} onclick="chooseLetter()"/>
                     ))}
                 </div>
             ))}
