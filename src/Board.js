@@ -55,23 +55,29 @@ const Cell = ({ cell, onClick }) => {
 function Board() {
     const [grid, setGrid] = useState(createInitialGrid());
     const [chosenLetters, setChosenLetters] = useState('');
+    let selectedCells = [];
+    let numSelected = 0;
     
-    const handleCellClick = (rowIndex, colIndex) => {
-        const updatedGrid = [...grid];
-        const clickedCell = updatedGrid[rowIndex][colIndex];
-
-        if (!clickedCell.isSelected) {
-            setChosenLetters(prevLetters => prevLetters + cell.letter);
-        } else {
+    const handleCellClick = (cell) => {
+        if (cell.isSelected) {
             setChosenLetters('');
             // if (!spell.correct(chosenLetters)) {
             //     setChosenLetters('Not in word list');
             // }
             if (board.words.includes(chosenLetters.toLowerCase))
                 {
-        
+                    for(let i = 0; i < numSelected; i++) {
+                        selectedCells[i].isFound = true;
+                        selectedCells[i].isThemeWord = true;
+                        selectedCells[i].isSelected = false;
+                        
+                    }
                 }
             
+        } else {
+            setChosenLetters(prevLetters => prevLetters + cell.letter);
+            selectedCells.push(cell);
+            numSelected++;
         }
 
         cell.isSelected = !cell.isSelected;
@@ -83,7 +89,7 @@ function Board() {
             {grid.map((row, rowIndex) => (
                 <div key={rowIndex} className="row">
                     {row.map((cell, colIndex) => (
-                        <Cell key={colIndex} cell={cell} onClick={() => handleCellClick(rowIndex, colIndex)}/>
+                        <Cell key={colIndex} cell={cell} onClick={() => handleCellClick(cell)}/>
                     ))}
                 </div>
             ))}
