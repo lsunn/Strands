@@ -3,14 +3,8 @@
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  width: 10%;
+  height: 10%;
 }
 
 .StartScene {
@@ -31,17 +25,8 @@
 .Title {
   font-family: 'Stymie';
   font-style: bold;
+  margin: 0;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 
 .grid {
   display: flex;
@@ -77,4 +62,22 @@
 
 h2 {
   text-align: center;
+  margin: 0;
+}
+
+.logo {
+  width: 25%;
+  height: 25%;
+}
+
+.themeWord {
+  background-color: #AAE5F2;
+}
+
+.spangram {
+  background-color: #EFC929;
+}
+
+.selected {
+  background-color: #D8D8C5;
 }
