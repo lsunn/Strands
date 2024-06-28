@@ -1,6 +1,6 @@
 const board = {
     "theme":"All atwitter",
-    "spangram": "birdsong",
+    "spangram": "BIRDSONG",
     "letters": [
         ['E', 'C', 'E', 'E', 'T', 'I'],
         ['E', 'H', 'W', 'W', 'H', 'S'],

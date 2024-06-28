@@ -35,6 +35,8 @@
   align-items: center;
   height: 100vh;
   margin: 0;
+  user-select: none;
+
 }
 
 .row {
@@ -49,6 +51,10 @@
   justify-content: center;
   font-size: 40px;
   font-family: 'Arial';
+  user-select: none;
+  padding: 10px;
+  margin: 2px;
+  box-sizing: border-box;
 }
 
 .Banner {
