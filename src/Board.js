@@ -56,82 +56,133 @@ function Board() {
     const [chosenLetters, setChosenLetters] = useState('');
     const [selectedCells, setSelectedCells] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
+    const [startCell, setStartCell] = useState(null);
 
     const handleMouseDown = (rowIndex, colIndex) => {
+        setStartCell({rowIndex, colIndex});
         setIsDragging(true);
-        handleCellClick(rowIndex, colIndex);
+        
+        //handleDragSelect(rowIndex, colIndex);
+        //handleCellClick(rowIndex, colIndex);
     };
 
     const handleMouseEnter = (rowIndex, colIndex) => {
         if (isDragging) {
-            handleCellClick(rowIndex, colIndex);
+            if(selectedCells.length < 1) {
+                setChosenLetters(prevLetters => prevLetters + startCell.letter);
+                setSelectedCells(prevCells => [...prevCells, { row: rowIndex, col: colIndex }]);
+                startCell.isSelected = true;
+            }
+            handleDragSelect(rowIndex, colIndex);
         }
     };
 
     const handleMouseUp = (rowIndex, colIndex) => {
-        setIsDragging(false);
+        if(isDragging) {
+            setIsDragging(false);
+            if (startCell.rowIndex === rowIndex && startCell.colIndex === colIndex) {
+                handleCellClick(rowIndex, colIndex);
+            } else {
+                checkWord();
+            // if(selectedCells.length > 0) {
+            //     checkWord();
+            // } else {
+            //     handleCellClick(rowIndex, colIndex);
+        }
+        // handleCellClick(rowIndex, colIndex);
+        // setSelectedCells([]);
+        // setChosenLetters('');
+    } else {
         handleCellClick(rowIndex, colIndex);
-        setSelectedCells([]);
-        setChosenLetters('');
     }
+    setStartCell(null);
+    };
 
-    // const handleDragSelect = (rowIndex, colIndex) => {
-    //     const updatedGrid = [...grid];
-    //     const cell = updatedGrid[rowIndex][colIndex];
-
-    //     if(!cell.isSelected) {
-    //         setChosenLetters(prevLetters => prevLetters + cell.letter);
-    //         setSelectedCells(prevCells => [...prevCells, { row: rowIndex, col: colIndex }]);
-    //         cell.isSelected = true;
-    //         setGrid(updatedGrid);
-    //     }
-    // };
-
-    const handleCellClick = (rowIndex, colIndex) => {
+    const handleDragSelect = (rowIndex, colIndex) => {
         const updatedGrid = [...grid];
         const cell = updatedGrid[rowIndex][colIndex];
 
-        if(selectedCells.length == 0) {
+        if(selectedCells.length === 0) {
             setChosenLetters('');
         }
 
-        if(isDragging) {
+        if(!cell.isSelected) {
             setChosenLetters(prevLetters => prevLetters + cell.letter);
             setSelectedCells(prevCells => [...prevCells, { row: rowIndex, col: colIndex }]);
             cell.isSelected = true;
             setGrid(updatedGrid);
-        } else {
+        }
+    };
+
+    const handleCellClick = (rowIndex, colIndex) => {
+        if(!isDragging) {
+        const updatedGrid = [...grid];
+        const cell = updatedGrid[rowIndex][colIndex];
+
+        if(selectedCells.length === 0) {
+            setChosenLetters('');
+        }
+
+        // if(selectedCells.length == 0) {
+        //     setChosenLetters('');
+        // }
         
         if (cell.isSelected) {
-            if (words.includes(chosenLetters)) {
-                setChosenLetters('valid word');
-                selectedCells.forEach(({ row, col }) => {
-                    updatedGrid[row][col].isFound = true;
-                    updatedGrid[row][col].isThemeWord = true;
-                    updatedGrid[row][col].isSelected = false;
-                });
-            } else if (spangram === chosenLetters) {
-                selectedCells.forEach(({ row, col }) => {
-                    updatedGrid[row][col].isFound = true;
-                    updatedGrid[row][col].isSpangram = true;
-                    updatedGrid[row][col].isSelected = false;
-                });
-            } else {
-                setChosenLetters('Not in word list');
-                selectedCells.forEach(({ row, col }) => {
-                    updatedGrid[row][col].isSelected = false;
-                });
-            }
-            setSelectedCells([]);
+            // if (words.includes(chosenLetters)) {
+            //     setChosenLetters('valid word');
+            //     selectedCells.forEach(({ row, col }) => {
+            //         updatedGrid[row][col].isFound = true;
+            //         updatedGrid[row][col].isThemeWord = true;
+            //         updatedGrid[row][col].isSelected = false;
+            //     });
+            // } else if (spangram === chosenLetters) {
+            //     selectedCells.forEach(({ row, col }) => {
+            //         updatedGrid[row][col].isFound = true;
+            //         updatedGrid[row][col].isSpangram = true;
+            //         updatedGrid[row][col].isSelected = false;
+            //     });
+            // } else {
+            //     setChosenLetters('Not in word list');
+            //     selectedCells.forEach(({ row, col }) => {
+            //         updatedGrid[row][col].isSelected = false;
+            //     });
+            // }
+            // setSelectedCells([]);
+            checkWord();
         } else {
             setChosenLetters(prevLetters => prevLetters + cell.letter);
-            setSelectedCells([...selectedCells, { row: rowIndex, col: colIndex }]);
+            setSelectedCells(prevCells => [...prevCells, { row: rowIndex, col: colIndex }]);
             cell.isSelected = !cell.isSelected;
         }
-    }
 
         setGrid(updatedGrid);
+    }
     };
+
+    const checkWord = () => {
+        const updatedGrid = [...grid];
+        if (words.includes(chosenLetters)) {
+            setChosenLetters('valid word');
+            selectedCells.forEach(({ row, col }) => {
+                updatedGrid[row][col].isFound = true;
+                updatedGrid[row][col].isThemeWord = true;
+                updatedGrid[row][col].isSelected = false;
+            });
+        } else if (spangram === chosenLetters) {
+            selectedCells.forEach(({ row, col }) => {
+                updatedGrid[row][col].isFound = true;
+                updatedGrid[row][col].isSpangram = true;
+                updatedGrid[row][col].isSelected = false;
+            });
+        } else {
+            setChosenLetters('Not in word list');
+            selectedCells.forEach(({ row, col }) => {
+                updatedGrid[row][col].isSelected = false;
+            });
+        }
+        setSelectedCells([]);
+        setGrid(updatedGrid);
+    }
 
     return (
         <div className="grid">
