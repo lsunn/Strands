@@ -58,55 +58,47 @@ function Board() {
     const [isDragging, setIsDragging] = useState(false);
     const [startCell, setStartCell] = useState(null);
 
-    const handleMouseDown = (rowIndex, colIndex) => {
-        setStartCell({rowIndex, colIndex});
+    const handleMouseDown = (cell, rowIndex, colIndex) => {
+        setStartCell({cell, rowIndex, colIndex});
         setIsDragging(true);
-        
-        //handleDragSelect(rowIndex, colIndex);
-        //handleCellClick(rowIndex, colIndex);
     };
 
     const handleMouseEnter = (rowIndex, colIndex) => {
+        const updatedGrid = [...grid];
+
         if (isDragging) {
             if(selectedCells.length < 1) {
-                setChosenLetters(prevLetters => prevLetters + startCell.letter);
-                setSelectedCells(prevCells => [...prevCells, { row: rowIndex, col: colIndex }]);
-                startCell.isSelected = true;
+                if (selectedCells.length === 0) {
+                    setChosenLetters('');
+                }
+                setChosenLetters(prevLetters => prevLetters + startCell.cell.letter);
+                setSelectedCells(prevCells => [...prevCells, { row: startCell.rowIndex, col: startCell.colIndex }]);
+                startCell.cell.isSelected = true;
+                setGrid(updatedGrid);
             }
             handleDragSelect(rowIndex, colIndex);
         }
     };
 
     const handleMouseUp = (rowIndex, colIndex) => {
-        if(isDragging) {
+        if (isDragging) {
             setIsDragging(false);
             if (startCell.rowIndex === rowIndex && startCell.colIndex === colIndex) {
                 handleCellClick(rowIndex, colIndex);
             } else {
                 checkWord();
-            // if(selectedCells.length > 0) {
-            //     checkWord();
-            // } else {
-            //     handleCellClick(rowIndex, colIndex);
         }
-        // handleCellClick(rowIndex, colIndex);
-        // setSelectedCells([]);
-        // setChosenLetters('');
-    } else {
-        handleCellClick(rowIndex, colIndex);
-    }
-    setStartCell(null);
+        } else {
+            handleCellClick(rowIndex, colIndex);
+        }
+        setStartCell(null);
     };
 
     const handleDragSelect = (rowIndex, colIndex) => {
         const updatedGrid = [...grid];
         const cell = updatedGrid[rowIndex][colIndex];
 
-        if(selectedCells.length === 0) {
-            setChosenLetters('');
-        }
-
-        if(!cell.isSelected) {
+        if (!cell.isSelected) {
             setChosenLetters(prevLetters => prevLetters + cell.letter);
             setSelectedCells(prevCells => [...prevCells, { row: rowIndex, col: colIndex }]);
             cell.isSelected = true;
@@ -115,48 +107,24 @@ function Board() {
     };
 
     const handleCellClick = (rowIndex, colIndex) => {
-        if(!isDragging) {
-        const updatedGrid = [...grid];
-        const cell = updatedGrid[rowIndex][colIndex];
+        if (!isDragging) {
+            const updatedGrid = [...grid];
+            const cell = updatedGrid[rowIndex][colIndex];
 
-        if(selectedCells.length === 0) {
-            setChosenLetters('');
+            if (selectedCells.length === 0) {
+                setChosenLetters('');
+            }
+            
+            if (cell.isSelected) {
+                checkWord();
+            } else {
+                setChosenLetters(prevLetters => prevLetters + cell.letter);
+                setSelectedCells(prevCells => [...prevCells, { row: rowIndex, col: colIndex }]);
+                cell.isSelected = !cell.isSelected;
+            }
+
+            setGrid(updatedGrid);
         }
-
-        // if(selectedCells.length == 0) {
-        //     setChosenLetters('');
-        // }
-        
-        if (cell.isSelected) {
-            // if (words.includes(chosenLetters)) {
-            //     setChosenLetters('valid word');
-            //     selectedCells.forEach(({ row, col }) => {
-            //         updatedGrid[row][col].isFound = true;
-            //         updatedGrid[row][col].isThemeWord = true;
-            //         updatedGrid[row][col].isSelected = false;
-            //     });
-            // } else if (spangram === chosenLetters) {
-            //     selectedCells.forEach(({ row, col }) => {
-            //         updatedGrid[row][col].isFound = true;
-            //         updatedGrid[row][col].isSpangram = true;
-            //         updatedGrid[row][col].isSelected = false;
-            //     });
-            // } else {
-            //     setChosenLetters('Not in word list');
-            //     selectedCells.forEach(({ row, col }) => {
-            //         updatedGrid[row][col].isSelected = false;
-            //     });
-            // }
-            // setSelectedCells([]);
-            checkWord();
-        } else {
-            setChosenLetters(prevLetters => prevLetters + cell.letter);
-            setSelectedCells(prevCells => [...prevCells, { row: rowIndex, col: colIndex }]);
-            cell.isSelected = !cell.isSelected;
-        }
-
-        setGrid(updatedGrid);
-    }
     };
 
     const checkWord = () => {
@@ -182,18 +150,18 @@ function Board() {
         }
         setSelectedCells([]);
         setGrid(updatedGrid);
-    }
+    };
 
     return (
         <div className="grid">
-            <h1>{chosenLetters}</h1>
+            <h1> {chosenLetters} </h1>
             {grid.map((row, rowIndex) => (
                 <div key={rowIndex} className="row">
                     {row.map((cell, colIndex) => (
                         <Cell key={colIndex}
                         cell={cell}
                         onClick={() => handleCellClick(rowIndex, colIndex)}
-                        onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
+                        onMouseDown={() => handleMouseDown(cell, rowIndex, colIndex)}
                         onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
                         onMouseUp={() => handleMouseUp(rowIndex, colIndex)}/>
                     ))}
@@ -201,6 +169,6 @@ function Board() {
             ))}
         </div>
     );
-}
+};
 
 export default Board;
