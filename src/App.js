@@ -10,18 +10,16 @@ function App() {
   const [scene, setScene] = useState("beginning");
 
   return (
-    <>
+    <div className="App">
       {scene === "beginning" ? (
-        <div className="App">
           <Home setScene={setScene}/>
-        </div>
       ) : (
-        <div className="App">
+        <>
           <Banner/>
           <Board/>
-        </div>
+        </>
       )}
-    </>
+    </div>
   )
 }
 

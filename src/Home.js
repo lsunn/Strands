@@ -11,16 +11,12 @@ function Home(props) {
             <p>
                 Find hidden words and uncover the day's theme
             </p>
-
             <button onClick={() => {props.setScene("board")}}>Play
             </button>
-
             <p>Date</p>
             <p>Puzzle by </p>
             </header> 
-            
         </div>
     );
 }
-
 export default Home;
