@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import './App.css';
 import board from './Data.js';
 import Cell, {cell as cell} from './Cell.js';
+import Hint from './Hint.js';
 
+var checkWord = require('check-if-word'),
+    word = checkWord('en');
 
 let words = board.words;
 let spangram = board.spangram;
@@ -29,6 +32,25 @@ function Board() {
     const [selectedCells, setSelectedCells] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
     const [startCell, setStartCell] = useState(null);
+    const [numHints, setNumHints] = useState(0);
+    const [numExtraWords, setNumExtraWords] = useState(0);
+    const [foundHints, setFoundHints] = useState([]);
+
+    const increaseHintCounts = () => {
+        setNumExtraWords(prev => {
+            const newExtraWords = prev + 1;
+            if (newExtraWords >= 3) {
+                setNumHints(prevHints => prevHints + 1);
+                return newExtraWords - 3;
+            }
+            return newExtraWords;
+        });
+        setFoundHints(prevCells => [...prevCells, chosenLetters]);
+    };
+
+    const revealHint = () => {
+        
+    };
 
     const checkWord = () => {
         const updatedGrid = [...grid];
@@ -46,7 +68,15 @@ function Board() {
                 updatedGrid[row][col].isSelected = false;
             });
         } else {
-            setChosenLetters('Not in word list');
+            if (word.check(chosenLetters) & chosenLetters.length > 3) {
+                if(!foundHints.includes(chosenLetters)) {
+                    increaseHintCounts();
+                }
+            } else if (chosenLetters.length <= 3) {
+                setChosenLetters('Too short');
+            } else {
+                setChosenLetters('Not in word list');
+            }
             selectedCells.forEach(({ row, col }) => {
                 updatedGrid[row][col].isSelected = false;
             });
@@ -80,6 +110,7 @@ function Board() {
                     ))}
                 </div>
             ))}
+            <Hint revealHint={revealHint} numHints={numHints} numExtraWords={numExtraWords} />
         </div>
     );
 };
