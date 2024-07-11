@@ -9,7 +9,7 @@ function Hint({revealHint, numHints, numExtraWords}){
             ) : (
                 <button className='disabled'>Hint</button>
             )}
-            <p>Hints: {numHints}</p>
+            <p>Extra words found: {numExtraWords}</p>
         </div>
     )
 }

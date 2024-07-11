@@ -5,7 +5,8 @@ export const cell = {
     isSelected: false,
     isFound: false,
     isThemeWord: false,
-    isSpangram: false
+    isSpangram: false,
+    isHint: false
 };
 
 const Cell = ({
@@ -30,7 +31,10 @@ const Cell = ({
         backgroundColor = cell.isThemeWord ? '#AAE5F2' : cell.isSpangram ? '#EFC929' : null;
     } else if (cell.isSelected) {
         backgroundColor = "#D8D8C5";
-    } else {
+    } else if (cell.isHint) {
+        backgroundColor = 'grey';
+    }
+    else {
         backgroundColor = null;
     }
 
