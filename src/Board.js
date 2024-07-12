@@ -1,52 +1,82 @@
 import React, { useState } from 'react';
 import './App.css';
+import board from './Data.js';
+import Cell, {cell as cell} from './Cell.js';
 
-const cell = {
-    //letter to be determined
-    letter: 'A',
-    isSelected: false,
-    isFound: false,
-};
+
+let words = board.words;
+let spangram = board.spangram;
 
 const numRows = 8;
 const numCols = 6;
 
 const createInitialGrid = () => {
-    // Initialize an empty array for the grid
     const grid = [];
     for (let row = 0; row < numRows; row++) { 
-        // Initialize an empty array for the current row
         const currentRow = [];
         for (let col = 0; col < numCols; col++) {
-            currentRow.push({ ...cell });
+            currentRow.push({ ...cell, letter: board.letters[row][col] });
         }
-        //Add the current row to the grid
         grid.push(currentRow);
     }
     return grid;
 };
 
-const Cell = ({ cell }) => {
-    return (
-        <div className="cell">
-            {cell.letter}
-        </div>
-    );
-};
-
-function chooseLetter() {
-    
-};
 
 function Board() {
     const [grid, setGrid] = useState(createInitialGrid());
+    const [chosenLetters, setChosenLetters] = useState('');
+    const [selectedCells, setSelectedCells] = useState([]);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startCell, setStartCell] = useState(null);
+
+    const checkWord = () => {
+        const updatedGrid = [...grid];
+        if (words.includes(chosenLetters)) {
+            setChosenLetters('valid word');
+            selectedCells.forEach(({ row, col }) => {
+                updatedGrid[row][col].isFound = true;
+                updatedGrid[row][col].isThemeWord = true;
+                updatedGrid[row][col].isSelected = false;
+            });
+        } else if (spangram === chosenLetters) {
+            selectedCells.forEach(({ row, col }) => {
+                updatedGrid[row][col].isFound = true;
+                updatedGrid[row][col].isSpangram = true;
+                updatedGrid[row][col].isSelected = false;
+            });
+        } else {
+            setChosenLetters('Not in word list');
+            selectedCells.forEach(({ row, col }) => {
+                updatedGrid[row][col].isSelected = false;
+            });
+        }
+        setSelectedCells([]);
+        setGrid(updatedGrid);
+    };
 
     return (
         <div className="grid">
+            <h1> {chosenLetters} </h1>
             {grid.map((row, rowIndex) => (
                 <div key={rowIndex} className="row">
                     {row.map((cell, colIndex) => (
-                        <Cell key={colIndex} cell={cell} onclick="chooseLetter()"/>
+                        <Cell
+                            key={rowIndex + colIndex}
+                            cell={cell}
+                            grid={grid}
+                            position={{ rowIndex, colIndex }}
+                            isDragging={isDragging}
+                            chosenLetters={chosenLetters}
+                            selectedCells={selectedCells}
+                            startCell={startCell}
+                            setGrid={setGrid}
+                            setChosenLetters={setChosenLetters}
+                            setSelectedCells={setSelectedCells}
+                            setIsDragging={setIsDragging}
+                            setStartCell={setStartCell}
+                            checkWord={checkWord}
+                        />
                     ))}
                 </div>
             ))}
