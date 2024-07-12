@@ -87,3 +87,21 @@ h2 {
 .selected {
   background-color: #D8D8C5;
 }
+
+.hint {
+  border-radius: 12px;
+  background-color: white;
+  color: black;
+  border: 2px solid gray;
+  font-size: 20px;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  border-radius: 12px;
+  background-color: white;
+  color: black;
+  border: 2px solid gray;
+  font-size: 20px;
+}
