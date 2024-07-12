@@ -32,22 +32,13 @@ function Board() {
     const [selectedCells, setSelectedCells] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
     const [startCell, setStartCell] = useState(null);
-    const [numHints, setNumHints] = useState(0); //number of hints user has unused 
-    const [numExtraWords, setNumExtraWords] = useState(0); //number of hint words the user has found 
-    const [foundHints, setFoundHints] = useState([]); //words used for hints already 
-
-    // const increaseHintCounts = () => {
-    //     setNumExtraWords(prev => {
-    //         const newExtraWords = prev + 1;
-    //         if (newExtraWords >= 3) {
-    //             setNumHints(prevHints => prevHints + 1);
-    //             return newExtraWords - 3;
-    //         }
-    //         return newExtraWords;
-    //     });
-    //     setFoundHints(prevCells => [...prevCells, chosenLetters]);
-    // };
-
+    //number of hints user has unused 
+    const [numHints, setNumHints] = useState(0); 
+    //number of hint words the user has found 
+    const [numExtraWords, setNumExtraWords] = useState(0); 
+    //words used for hints already 
+    const [foundHints, setFoundHints] = useState([]); 
+    
     const increaseExtraWords = () => {
         setNumExtraWords(prev => prev + 1);
         setFoundHints(prevCells => [...prevCells, chosenLetters]);
