@@ -3,6 +3,7 @@ import './App.css';
 import board from './Data.js';
 import Cell, {cell as cell} from './Cell.js';
 import Hint from './Hint.js';
+import 'animate.css';
 
 var checkWord = require('check-if-word'),
     word = checkWord('en');
@@ -38,6 +39,8 @@ function Board() {
     const [numExtraWords, setNumExtraWords] = useState(0); 
     //words used for hints already 
     const [foundHints, setFoundHints] = useState([]); 
+    const [hintsOnBoard, setHintsOnBoard] = useState(0);
+    const [currHintWord, setCurrHintWord] = useState(null);
     
     const increaseExtraWords = () => {
         setNumExtraWords(prev => prev + 1);
@@ -47,11 +50,23 @@ function Board() {
 
     const revealHint = () => {
         const updatedGrid = grid.map(row => row.map(cell => ({ ...cell })));
-        const randomWord = Math.floor(Math.random() * words.length);
-        const wordObj = words[randomWord];
-        wordObj.positions.forEach(positions => {
-            updatedGrid[positions.row][positions.col].isHint = true;
-        })
+        let wordObj;
+        
+        if(hintsOnBoard == 0) {
+            const randomWord = Math.floor(Math.random() * words.length);
+            wordObj = words[randomWord];
+            wordObj.positions.forEach(positions => {
+                updatedGrid[positions.row][positions.col].isHint = true;
+            })
+            setHintsOnBoard(1);
+            setCurrHintWord(wordObj);
+            
+        } else {
+            currHintWord.positions.forEach(positions => {
+                updatedGrid[positions.row][positions.col].isSecondHint = true;
+            })
+            setHintsOnBoard(0);
+        }
         setNumExtraWords(0);
         setGrid(updatedGrid);
     };

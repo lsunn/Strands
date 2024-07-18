@@ -57,6 +57,23 @@
   box-sizing: border-box;
 }
 
+
+.cell.found-theme-word {
+  background-color: #AAE5F2;
+}
+
+.cell.found-spangram {
+  background-color: #EFC929;
+}
+
+.cell.selected {
+  background-color: #D8D8C5;
+}
+
+.cell.hint {
+  border: dotted lightblue;
+}
+
 .Banner {
   font-size: 20px;
   display: inline-block; /* Ensures the background color only spans the text */
