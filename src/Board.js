@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import './App.css';
 import board from './Data.js';
 import Cell, {cell as cell} from './Cell.js';
+import Hint from './Hint.js';
+import 'animate.css';
 
+var checkWord = require('check-if-word'),
+    word = checkWord('en');
 
 let words = board.words;
 let spangram = board.spangram;
@@ -29,16 +33,54 @@ function Board() {
     const [selectedCells, setSelectedCells] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
     const [startCell, setStartCell] = useState(null);
+    //number of hints user has unused 
+    const [numHints, setNumHints] = useState(0); 
+    //number of hint words the user has found 
+    const [numExtraWords, setNumExtraWords] = useState(0); 
+    //words used for hints already 
+    const [foundHints, setFoundHints] = useState([]); 
+    const [hintsOnBoard, setHintsOnBoard] = useState(0);
+    const [currHintWord, setCurrHintWord] = useState(null);
+    
+    const increaseExtraWords = () => {
+        setNumExtraWords(prev => prev + 1);
+        setFoundHints(prevCells => [...prevCells, chosenLetters]);
+    }
+
+
+    const revealHint = () => {
+        const updatedGrid = grid.map(row => row.map(cell => ({ ...cell })));
+        let wordObj;
+        
+        if(hintsOnBoard == 0) {
+            const randomWord = Math.floor(Math.random() * words.length);
+            wordObj = words[randomWord];
+            wordObj.positions.forEach(positions => {
+                updatedGrid[positions.row][positions.col].isHint = true;
+            })
+            setHintsOnBoard(1);
+            setCurrHintWord(wordObj);
+            
+        } else {
+            currHintWord.positions.forEach(positions => {
+                updatedGrid[positions.row][positions.col].isSecondHint = true;
+            })
+            setHintsOnBoard(0);
+        }
+        setNumExtraWords(0);
+        setGrid(updatedGrid);
+    };
 
     const checkWord = () => {
         const updatedGrid = [...grid];
-        if (words.includes(chosenLetters)) {
+        if (words.some(wordObj => wordObj.word === chosenLetters)){
             setChosenLetters('valid word');
             selectedCells.forEach(({ row, col }) => {
                 updatedGrid[row][col].isFound = true;
                 updatedGrid[row][col].isThemeWord = true;
                 updatedGrid[row][col].isSelected = false;
             });
+            words = words.filter(wordObj => wordObj.word !== word);
         } else if (spangram === chosenLetters) {
             selectedCells.forEach(({ row, col }) => {
                 updatedGrid[row][col].isFound = true;
@@ -46,7 +88,18 @@ function Board() {
                 updatedGrid[row][col].isSelected = false;
             });
         } else {
-            setChosenLetters('Not in word list');
+            if (word.check(chosenLetters) & chosenLetters.length > 3) {
+                if(!foundHints.includes(chosenLetters)) {
+                    increaseExtraWords();
+                } else {
+                    setChosenLetters('Already found');
+                }
+                setChosenLetters('');
+            } else if (chosenLetters.length <= 3) {
+                setChosenLetters('Too short');
+            } else {
+                setChosenLetters('Not in word list');
+            }
             selectedCells.forEach(({ row, col }) => {
                 updatedGrid[row][col].isSelected = false;
             });
@@ -80,6 +133,7 @@ function Board() {
                     ))}
                 </div>
             ))}
+            <Hint revealHint={revealHint} numHints={numHints} numExtraWords={numExtraWords} />
         </div>
     );
 };

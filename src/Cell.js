@@ -1,11 +1,14 @@
 import React from 'react';
+import "animate.css";
 
 export const cell = {
     letter: 'A',
     isSelected: false,
     isFound: false,
     isThemeWord: false,
-    isSpangram: false
+    isSpangram: false,
+    isHint: false,
+    isSecondHint: false
 };
 
 const Cell = ({
@@ -23,16 +26,25 @@ const Cell = ({
     setStartCell,
     checkWord
 }) => {
-    let backgroundColor = 'white';
+    //let backgroundColor = 'white';
     const {rowIndex, colIndex} = position;
+    let cellClass = "cell";
 
     if (cell.isFound) {
-        backgroundColor = cell.isThemeWord ? '#AAE5F2' : cell.isSpangram ? '#EFC929' : null;
+        //backgroundColor = cell.isThemeWord ? '#AAE5F2' : cell.isSpangram ? '#EFC929' : null;
+        cellClass += cell.isThemeWord ? " found-theme-word" : cell.isSpangram ? " found-spangram" : "";
     } else if (cell.isSelected) {
-        backgroundColor = "#D8D8C5";
-    } else {
-        backgroundColor = null;
+        //backgroundColor = "#D8D8C5";
+        cellClass += " selected";
+    } else if (cell.isHint) {
+        //backgroundColor = 'grey';
+        cellClass += " hint";
+    } else if (cell.isSecondHint) {
+        cellClass += " animate__animated animate__pulse";
     }
+    // else {
+    //     backgroundColor = null;
+    // }
 
 
     const handleMouseDown = () => {
@@ -108,8 +120,8 @@ const Cell = ({
 
 
     return (
-        <div className="cell"
-            style={{ backgroundColor }}
+        <div className={cellClass}
+           // style={{ backgroundColor }}
             onClick={handleCellClick}
             onMouseDown={handleMouseDown}
             onMouseEnter={handleMouseEnter}
